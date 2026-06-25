@@ -1,5 +1,6 @@
 package gui;
 
+import exceptions.ScenarioException;
 import model.Airport;
 
 import java.awt.*;
@@ -10,8 +11,6 @@ public class AddAirportDialog extends Dialog {
     private TextField nameField;
     private TextField xField;
     private TextField yField;
-
-    private Airport airport;
 
     public AddAirportDialog(Frame owner) {
         super(owner, "Add Airport", true);
@@ -25,7 +24,7 @@ public class AddAirportDialog extends Dialog {
         xField = new TextField();
         yField = new TextField();
 
-        formPanel.add(new Label("Code:"));
+        formPanel.add(new Label("3-letter Code:"));
         formPanel.add(codeField);
 
         formPanel.add(new Label("Name:"));
@@ -53,30 +52,22 @@ public class AddAirportDialog extends Dialog {
             public void actionPerformed(ActionEvent e) {
                 String code = codeField.getText().trim();
                 String name = nameField.getText().trim();
-                String x = xField.getText().trim();
-                String y = yField.getText().trim();
+                String X = xField.getText().trim();
+                String Y = yField.getText().trim();
 
-                /*
-                 * TODO:
-                 * Ovde iskucaj svoju logiku:
-                 * - validacija unosa
-                 * - parsiranje koordinata
-                 * - pravljenje Airport objekta
-                 *
-                 * Na kraju treba da dodeliš:
-                 * airport = ...
-                 *
-                 * Ako unos nije validan, prikaži grešku i nemoj zatvarati dialog.
-                 */
-
-                dispose();
+                try {
+                    ((MainFrame) owner).getApi().addAirport(code, name, X, Y);
+                    dispose();
+                } catch (ScenarioException ex) {
+                    ErrorDialog errorDialog = new ErrorDialog(owner, ex.getMessage());
+                    errorDialog.showDialog();
+                }
             }
         });
 
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                airport = null;
                 dispose();
             }
         });
@@ -84,7 +75,6 @@ public class AddAirportDialog extends Dialog {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                airport = null;
                 dispose();
             }
         });
@@ -93,12 +83,8 @@ public class AddAirportDialog extends Dialog {
         setResizable(false);
     }
 
-    public Airport showDialog() {
-        airport = null;
-
+    public void showDialog() {
         setLocationRelativeTo(getOwner());
         setVisible(true);
-
-        return airport;
     }
 }

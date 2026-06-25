@@ -1,5 +1,6 @@
 package gui;
 
+import api.API;
 import model.Airport;
 import model.Flight;
 
@@ -7,11 +8,14 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class MainFrame extends Frame {
+    private API api;
     private TextArea airportsList;
     private TextArea flightsList;
 
-    public MainFrame() {
+    public MainFrame(API api) {
         super("Air Traffic Simulation");
+
+        this.api = api;
 
         setLayout(new BorderLayout());
 
@@ -54,15 +58,8 @@ public class MainFrame extends Frame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 AddAirportDialog dialog = new AddAirportDialog(MainFrame.this);
-                Airport airport = dialog.showDialog();
-
-                if (airport == null) {
-                    return;
-                }
-
-                // TODO:
-                // prosledi result.code, result.name, result.x, result.y controller-u
-                // controller onda poziva scenario.addAirport(...)
+                dialog.showDialog();
+                refreshAirportsList();
             }
         });
 
@@ -88,15 +85,8 @@ public class MainFrame extends Frame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 AddFlightDialog dialog = new AddFlightDialog(MainFrame.this);
-                Flight flight = dialog.showDialog();
-
-                if (flight == null) {
-                    return;
-                }
-
-                // TODO:
-                // prosledi result.fromCode, result.toCode,
-                // result.departureTime, result.durationMinutes controller-u
+                dialog.showDialog();
+                refreshFlightsList();
             }
         });
 
@@ -105,5 +95,54 @@ public class MainFrame extends Frame {
         panel.add(addFlightButton, BorderLayout.SOUTH);
 
         return panel;
+    }
+
+    private void refreshAirportsList() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(String.format("%-6s %-30s %8s %8s\n", "CODE", "NAME", "X", "Y"));
+        sb.append("-------------------------------------\n");
+
+        for (Airport airport : api.getAirports()) {
+            sb.append(String.format(
+                    "%-6s %-30s %8d %8d\n",
+                    airport.getCode(),
+                    airport.getName(),
+                    airport.getX(),
+                    airport.getY()
+            ));
+        }
+
+        airportsList.setText(sb.toString());
+    }
+
+    private void refreshFlightsList() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(String.format("%-6s %-6s %-10s %-10s\n", "FROM", "TO", "DEPART", "DURATION"));
+        sb.append("-------------------------------------\n");
+
+        for (Flight flight : api.getFlights()) {
+            sb.append(String.format(
+                    "%-6s %-6s %-10s %-10d\n",
+                    flight.getFrom().getCode(),
+                    flight.getTo().getCode(),
+                    formatTime(flight.getDeparture()),
+                    flight.getDuration()
+            ));
+        }
+
+        flightsList.setText(sb.toString());
+    }
+
+    private String formatTime(int timeInMinutes) {
+        int hh = timeInMinutes / 60;
+        int mm = timeInMinutes % 60;
+
+        return String.format("%02d:%02d", hh, mm);
+    }
+
+    public API getApi() {
+        return api;
     }
 }

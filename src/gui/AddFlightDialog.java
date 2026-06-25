@@ -1,5 +1,6 @@
 package gui;
 
+import exceptions.ScenarioException;
 import model.Flight;
 
 import java.awt.*;
@@ -10,8 +11,6 @@ public class AddFlightDialog extends Dialog {
     private TextField toCodeField;
     private TextField departureTimeField;
     private TextField durationField;
-
-    private Flight flight;
 
     public AddFlightDialog(Frame owner) {
         super(owner, "Add Flight", true);
@@ -56,29 +55,19 @@ public class AddFlightDialog extends Dialog {
                 String departureTime = departureTimeField.getText().trim();
                 String duration = durationField.getText().trim();
 
-                /*
-                 * TODO:
-                 * Ovde iskucaj svoju logiku:
-                 * - validacija kodova aerodroma
-                 * - nalaženje referenci na aerodrome preko scenarija
-                 * - validacija vremena u formatu hh:mm
-                 * - parsiranje trajanja
-                 * - pravljenje Flight objekta
-                 *
-                 * Na kraju treba da dodeliš:
-                 * flight = ...
-                 *
-                 * Ako unos nije validan, prikaži grešku i nemoj zatvarati dialog.
-                 */
-
-                dispose();
+                try {
+                    ((MainFrame) owner).getApi().addFlight(fromCode, toCode, departureTime, duration);
+                    dispose();
+                } catch (ScenarioException ex) {
+                    ErrorDialog errorDialog = new ErrorDialog(owner, ex.getMessage());
+                    errorDialog.showDialog();
+                }
             }
         });
 
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                flight = null;
                 dispose();
             }
         });
@@ -86,7 +75,6 @@ public class AddFlightDialog extends Dialog {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                flight = null;
                 dispose();
             }
         });
@@ -95,12 +83,8 @@ public class AddFlightDialog extends Dialog {
         setResizable(false);
     }
 
-    public Flight showDialog() {
-        flight = null;
-
+    public void showDialog() {
         setLocationRelativeTo(getOwner());
         setVisible(true);
-
-        return flight;
     }
 }
