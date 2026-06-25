@@ -59,8 +59,7 @@ public class AddFlightDialog extends Dialog {
                     ((MainFrame) owner).getApi().addFlight(fromCode, toCode, departureTime, duration);
                     dispose();
                 } catch (ScenarioException ex) {
-                    ErrorDialog errorDialog = new ErrorDialog(owner, ex.getMessage());
-                    errorDialog.showDialog();
+                    ErrorDialog.showError(owner, ex.getMessage());
                 }
             }
         });

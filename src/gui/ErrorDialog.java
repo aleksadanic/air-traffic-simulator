@@ -37,4 +37,8 @@ public class ErrorDialog extends Dialog {
     public void showDialog() {
         setVisible(true);
     }
+
+    public static void showError(Frame owner, String message) {
+        new ErrorDialog(owner, message).showDialog();
+    }
 }

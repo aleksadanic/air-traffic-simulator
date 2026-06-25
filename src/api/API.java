@@ -18,6 +18,22 @@ public class API {
         currentScenario.addFlight(currentScenario.createFlight(from, to, departure, duration));
     }
 
+    public void loadCsvScenario(String path) {
+        System.out.println("Hehe1");
+    }
+
+    public void loadJsonScenario(String path) {
+        System.out.println("Hehe2");
+    }
+
+    public void saveCsvScenario(String path) {
+        System.out.println("Hehe3");
+    }
+
+    public void saveJsonScenario(String path) {
+        System.out.println("Hehe4");
+    }
+
     public List<Airport> getAirports() {
         return currentScenario.getAirports();
     }

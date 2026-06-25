@@ -59,8 +59,7 @@ public class AddAirportDialog extends Dialog {
                     ((MainFrame) owner).getApi().addAirport(code, name, X, Y);
                     dispose();
                 } catch (ScenarioException ex) {
-                    ErrorDialog errorDialog = new ErrorDialog(owner, ex.getMessage());
-                    errorDialog.showDialog();
+                    ErrorDialog.showError(owner, ex.getMessage());
                 }
             }
         });
