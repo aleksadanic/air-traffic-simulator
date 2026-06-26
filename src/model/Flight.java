@@ -17,6 +17,10 @@ public class Flight {
         return from.getCode() + "," + to.getCode() + "," + String.format("%02d:%02d", departure / 60, departure % 60) + "," + duration;
     }
 
+    public String toJson() {
+        return "{\"from\":\"" + from.getCode() + "\",\"to\":\"" + to.getCode() + "\",\"departure\":\"" + String.format("%02d:%02d", departure / 60, departure % 60) + "\",\"duration\":" + duration + "}";
+    }
+
     public Airport getFrom() {
         return from;
     }

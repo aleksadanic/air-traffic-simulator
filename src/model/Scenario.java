@@ -109,6 +109,66 @@ public class Scenario {
         return null;
     }
 
+    public String airportsToCsv() {
+        StringBuilder sb = new StringBuilder();
+        boolean first = true;
+        for (Airport airport : airports) {
+            if (!first) {
+                sb.append("\n");
+            } else {
+                first = false;
+            }
+            sb.append(airport.toCsv());
+        }
+        return sb.toString();
+    }
+
+    public String airportsToJson() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\"airports\":[\n");
+        boolean first = true;
+        for (Airport airport : airports) {
+            if (!first) {
+                sb.append(",\n");
+            } else {
+                first = false;
+            }
+            sb.append(airport.toJson());
+        }
+        sb.append("\n]");
+        return sb.toString();
+    }
+
+    public String flightsToCsv() {
+        StringBuilder sb = new StringBuilder();
+        boolean first = true;
+        for (Flight flight : flights) {
+            if (!first) {
+                sb.append("\n");
+            } else {
+                first = false;
+            }
+            sb.append(flight.toCsv());
+        }
+        return sb.toString();
+    }
+
+    public String flightsToJson() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\"flights\":[\n");
+        boolean first = true;
+        for (Flight flight : flights) {
+            if (!first) {
+                sb.append(",\n");
+            } else {
+                first = false;
+            }
+            sb.append(flight.toJson());
+        }
+        sb.append("\n]");
+        return sb.toString();
+    }
+
     public List<Airport> getAirports() {
         return airports;
     }

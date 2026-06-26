@@ -17,6 +17,10 @@ public class Airport {
         return code + "," + name + "," + X + "," + Y;
     }
 
+    public String toJson() {
+        return "{\"code\":\"" + code + "\",\"name\":\"" + name + "\",\"x\":" + X + ",\"y\":" + Y + "}";
+    }
+
     public String getCode() {
         return code;
     }
