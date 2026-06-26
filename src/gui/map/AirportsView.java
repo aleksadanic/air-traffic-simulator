@@ -1,0 +1,66 @@
+package gui.map;
+
+import model.Airport;
+
+import java.awt.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class AirportsView {
+    private MapCanvas mapCanvas;
+    private Set<Airport> blinking = new HashSet<>();
+    private boolean redPhase = false;
+    private Timer blinkingTimer;
+
+    public AirportsView(MapCanvas mapCanvas) {
+        this.mapCanvas = mapCanvas;
+    }
+
+    void drawAirports(Graphics g) {
+        for (Airport airport : mapCanvas.api.getAirports()) {
+            int X = mapCanvas.coordinatesService.mapX(airport.getX());
+            int Y = mapCanvas.coordinatesService.mapY(airport.getY());
+
+            if (redPhase && blinking.contains(airport)) {
+                g.setColor(Color.RED);
+            } else {
+                g.setColor(Color.GRAY);
+            }
+            g.fillRect(
+                X - CoordinatesService.AIRPORT_SIZE / 2,
+                Y - CoordinatesService.AIRPORT_SIZE / 2,
+                CoordinatesService.AIRPORT_SIZE,
+                CoordinatesService.AIRPORT_SIZE
+            );
+
+            g.setColor(Color.BLACK);
+            g.drawString(airport.getCode(), X + CoordinatesService.AIRPORT_SIZE / 2, Y - CoordinatesService.AIRPORT_SIZE / 2);
+        }
+    }
+
+    void toggleBlinking(Airport airport) {
+        if (blinking.contains(airport)) {
+            blinking.remove(airport);
+            if (blinking.isEmpty()) {
+                blinkingTimer.cancel();
+                blinkingTimer = null;
+                redPhase = false;
+                mapCanvas.repaint();
+            }
+        } else {
+            if (blinking.isEmpty()) {
+                blinkingTimer = new Timer(true);
+                blinkingTimer.scheduleAtFixedRate(new TimerTask() {
+                    @Override
+                    public void run() {
+                        redPhase = !redPhase;
+                        mapCanvas.repaint();
+                    }
+                }, 0, 500);
+            }
+            blinking.add(airport);
+        }
+    }
+}

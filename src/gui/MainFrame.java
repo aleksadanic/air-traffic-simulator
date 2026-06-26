@@ -1,8 +1,7 @@
 package gui;
 
 import api.API;
-import model.Airport;
-import model.Flight;
+import gui.map.MapCanvas;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -53,9 +52,9 @@ public class MainFrame extends Frame {
     }
 
     public void refreshAll() {
-        mapCanvas.repaint();
         airportsPanel.refreshAirportsList();
         flightsPanel.refreshFlightsList();
+        mapCanvas.repaint();
     }
 
     public API getApi() {
