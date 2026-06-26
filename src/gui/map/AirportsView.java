@@ -1,5 +1,6 @@
 package gui.map;
 
+import gui.AirportsPanel;
 import model.Airport;
 
 import java.awt.*;
@@ -13,13 +14,19 @@ public class AirportsView {
     private Set<Airport> blinking = new HashSet<>();
     private boolean redPhase = false;
     private Timer blinkingTimer;
+    private AirportsPanel airportsPanel;
 
-    public AirportsView(MapCanvas mapCanvas) {
+    public AirportsView(MapCanvas mapCanvas, AirportsPanel airportsPanel) {
         this.mapCanvas = mapCanvas;
+        this.airportsPanel = airportsPanel;
     }
 
     void drawAirports(Graphics g) {
         for (Airport airport : mapCanvas.api.getAirports()) {
+            if (!airportsPanel.isVisible(airport)) {
+                continue;
+            }
+
             int X = mapCanvas.coordinatesService.mapX(airport.getX());
             int Y = mapCanvas.coordinatesService.mapY(airport.getY());
 

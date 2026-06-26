@@ -20,17 +20,17 @@ public class MainFrame extends Frame {
 
         setLayout(new BorderLayout());
 
-        mapCanvas = new MapCanvas(api);
-
         Panel rightPanel = new Panel(new GridLayout(2, 1));
 
-        rightPanel.setPreferredSize(new Dimension(350, 0));
+        rightPanel.setPreferredSize(new Dimension(400, 0));
 
         airportsPanel = new AirportsPanel(this, api);
         flightsPanel = new FlightsPanel(this, api);
 
         rightPanel.add(airportsPanel);
         rightPanel.add(flightsPanel);
+
+        mapCanvas = new MapCanvas(api, airportsPanel);
 
         add(mapCanvas, BorderLayout.CENTER);
         add(rightPanel, BorderLayout.EAST);
@@ -59,5 +59,9 @@ public class MainFrame extends Frame {
 
     public API getApi() {
         return api;
+    }
+
+    public MapCanvas getMapCanvas() {
+        return mapCanvas;
     }
 }

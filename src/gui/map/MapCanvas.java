@@ -1,6 +1,7 @@
 package gui.map;
 
 import api.API;
+import gui.AirportsPanel;
 import model.Airport;
 
 import java.awt.*;
@@ -10,10 +11,12 @@ import java.awt.event.MouseEvent;
 public class MapCanvas extends Canvas {
     API api;
     CoordinatesService coordinatesService = new CoordinatesService(this);
-    AirportsView airportsView = new AirportsView(this);
+    AirportsView airportsView;
 
-    public MapCanvas(API api) {
+    public MapCanvas(API api, AirportsPanel airportsPanel) {
         this.api = api;
+
+        airportsView = new AirportsView(this, airportsPanel);
 
         setBackground(Color.WHITE);
         addMouseListener(new MouseAdapter() {

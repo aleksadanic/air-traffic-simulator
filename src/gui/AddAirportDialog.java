@@ -12,7 +12,7 @@ public class AddAirportDialog extends Dialog {
     private TextField xField;
     private TextField yField;
 
-    public AddAirportDialog(Frame owner) {
+    public AddAirportDialog(MainFrame owner) {
         super(owner, "Add Airport", true);
 
         setLayout(new BorderLayout());
@@ -47,29 +47,21 @@ public class AddAirportDialog extends Dialog {
         add(formPanel, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
 
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String code = codeField.getText().trim();
-                String name = nameField.getText().trim();
-                String X = xField.getText().trim();
-                String Y = yField.getText().trim();
+        addButton.addActionListener(e -> {
+            String code = codeField.getText().trim();
+            String name = nameField.getText().trim();
+            String X = xField.getText().trim();
+            String Y = yField.getText().trim();
 
-                try {
-                    ((MainFrame) owner).getApi().addAirport(code, name, X, Y);
-                    dispose();
-                } catch (ScenarioException ex) {
-                    ErrorDialog.showError(owner, ex.getMessage());
-                }
-            }
-        });
-
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+            try {
+                owner.getApi().addAirport(code, name, X, Y);
                 dispose();
+            } catch (ScenarioException ex) {
+                ErrorDialog.showError(owner, ex.getMessage());
             }
         });
+
+        cancelButton.addActionListener(e -> dispose());
 
         addWindowListener(new WindowAdapter() {
             @Override
