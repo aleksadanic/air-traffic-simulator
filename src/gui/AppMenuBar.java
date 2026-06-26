@@ -83,7 +83,7 @@ public class AppMenuBar extends MenuBar {
             return;
         }
 
-        String path = fileDialog.getDirectory() + fileDialog.getFile();
+        String path = fileDialog.getDirectory() + fileDialog.getFile() + ".csv";
 
         try {
             api.saveCsvScenario(path);
@@ -100,7 +100,7 @@ public class AppMenuBar extends MenuBar {
             return;
         }
 
-        String path = fileDialog.getDirectory() + fileDialog.getFile();
+        String path = fileDialog.getDirectory() + fileDialog.getFile() + ".json";
 
         try {
             api.saveJsonScenario(path);

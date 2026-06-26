@@ -13,6 +13,10 @@ public class Airport {
         this.Y = Y;
     }
 
+    public String toCsv() {
+        return code + "," + name + "," + X + "," + Y;
+    }
+
     public String getCode() {
         return code;
     }
