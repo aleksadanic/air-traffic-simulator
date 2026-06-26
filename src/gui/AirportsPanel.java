@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 public class AirportsPanel extends Panel {
     private Frame owner;
     private API api;
-    private TextArea airportsList;
+    private List airportsList;
 
     public AirportsPanel(Frame owner, API api) {
         super(new BorderLayout());
@@ -18,11 +18,8 @@ public class AirportsPanel extends Panel {
         this.owner = owner;
         this.api = api;
 
-        Label title = new Label("Airports", Label.CENTER);
-
-        airportsList = new TextArea("", 12, 40, TextArea.SCROLLBARS_VERTICAL_ONLY);
-        airportsList.setEditable(false);
-        airportsList.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        airportsList = new List();
+        airportsList.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
 
         Button addAirportButton = new Button("Add airport");
 
@@ -35,27 +32,21 @@ public class AirportsPanel extends Panel {
             }
         });
 
-        add(title, BorderLayout.NORTH);
+        add(new Label("Airports", Label.CENTER), BorderLayout.NORTH);
         add(airportsList, BorderLayout.CENTER);
         add(addAirportButton, BorderLayout.SOUTH);
     }
 
     public void refreshAirportsList() {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(String.format("%-6s %-30s %8s %8s\n", "CODE", "NAME", "X", "Y"));
-        sb.append("-------------------------------------\n");
-
+        airportsList.removeAll();
         for (Airport airport : api.getAirports()) {
-            sb.append(String.format(
-                    "%-6s %-30s %8d %8d\n",
+            airportsList.add(String.format(
+                    "%-5s %-28s %6d %6d",
                     airport.getCode(),
                     airport.getName(),
                     airport.getX(),
                     airport.getY()
             ));
         }
-
-        airportsList.setText(sb.toString());
     }
 }

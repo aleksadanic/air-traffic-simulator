@@ -9,6 +9,8 @@ import java.awt.event.*;
 
 public class MainFrame extends Frame {
     private API api;
+
+    private MapCanvas mapCanvas;
     private AirportsPanel airportsPanel;
     private FlightsPanel flightsPanel;
 
@@ -19,7 +21,11 @@ public class MainFrame extends Frame {
 
         setLayout(new BorderLayout());
 
+        mapCanvas = new MapCanvas(api);
+
         Panel rightPanel = new Panel(new GridLayout(2, 1));
+
+        rightPanel.setPreferredSize(new Dimension(350, 0));
 
         airportsPanel = new AirportsPanel(this, api);
         flightsPanel = new FlightsPanel(this, api);
@@ -27,11 +33,12 @@ public class MainFrame extends Frame {
         rightPanel.add(airportsPanel);
         rightPanel.add(flightsPanel);
 
+        add(mapCanvas, BorderLayout.CENTER);
         add(rightPanel, BorderLayout.EAST);
 
         setMenuBar(new AppMenuBar(this, api));
 
-        setSize(1500, 1000);
+        setSize(1500, 800);
         setResizable(false);
         setLocationRelativeTo(null);
 
@@ -46,6 +53,7 @@ public class MainFrame extends Frame {
     }
 
     public void refreshAll() {
+        mapCanvas.repaint();
         airportsPanel.refreshAirportsList();
         flightsPanel.refreshFlightsList();
     }

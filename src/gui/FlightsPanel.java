@@ -1,6 +1,7 @@
 package gui;
 
 import api.API;
+import model.Airport;
 import model.Flight;
 
 import java.awt.*;
@@ -10,7 +11,7 @@ import java.awt.event.ActionListener;
 public class FlightsPanel extends Panel {
     private Frame owner;
     private API api;
-    private TextArea flightsList;
+    private List flightsList;
 
     public FlightsPanel(Frame owner, API api) {
         super(new BorderLayout());
@@ -18,11 +19,8 @@ public class FlightsPanel extends Panel {
         this.owner = owner;
         this.api = api;
 
-        Label title = new Label("Flights", Label.CENTER);
-
-        flightsList = new TextArea("", 12, 40, TextArea.SCROLLBARS_VERTICAL_ONLY);
-        flightsList.setEditable(false);
-        flightsList.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        flightsList = new List();
+        flightsList.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
 
         Button addFlightButton = new Button("Add flight");
 
@@ -35,27 +33,21 @@ public class FlightsPanel extends Panel {
             }
         });
 
-        add(title, BorderLayout.NORTH);
+        add(new Label("Flights", Label.CENTER), BorderLayout.NORTH);
         add(flightsList, BorderLayout.CENTER);
         add(addFlightButton, BorderLayout.SOUTH);
     }
 
     public void refreshFlightsList() {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(String.format("%-6s %-6s %-10s %-10s\n", "FROM", "TO", "DEPART", "DURATION"));
-        sb.append("-------------------------------------\n");
-
+        flightsList.removeAll();
         for (Flight flight : api.getFlights()) {
-            sb.append(String.format(
-                    "%-6s %-6s %-10s %-10d\n",
+            flightsList.add(String.format(
+                    "%-5s %-5s %-8s %-8d",
                     flight.getFrom().getCode(),
                     flight.getTo().getCode(),
                     String.format("%02d:%02d", flight.getDeparture() / 60, flight.getDeparture() % 60),
                     flight.getDuration()
             ));
         }
-
-        flightsList.setText(sb.toString());
     }
 }
