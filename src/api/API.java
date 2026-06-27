@@ -1,6 +1,7 @@
 package api;
 
 import exceptions.ScenarioException;
+import gui.MainFrame;
 import model.data.Airport;
 import model.data.Flight;
 import model.data.Scenario;
@@ -14,10 +15,29 @@ import java.util.List;
 public class API {
     private Scenario currentScenario;
     private SimulationEngine currentSimulationEngine = null;
+    private MainFrame mainFrame;
+
+    public void pauseSimulation() {
+        if (currentSimulationEngine != null) {
+            currentSimulationEngine.pauseSimulation();
+        }
+    }
+
+    public void resumeSimulation() {
+        if (currentSimulationEngine != null) {
+            currentSimulationEngine.resumeSimulation();
+        }
+    }
+
+    public void resetSimulation() {
+        currentSimulationEngine = null;
+    }
 
     public void startSimulation() {
         currentSimulationEngine = new SimulationEngine(currentScenario);
+        currentSimulationEngine.setRunning(true);
         new Thread(currentSimulationEngine).start();
+        mainFrame.showSimulation();
     }
 
     public void addAirport(String code, String name, String X, String Y) {
@@ -29,6 +49,8 @@ public class API {
     }
 
     public void loadCsvScenario(String path) {
+        resetSimulation();
+
         try {
             Scenario newScenario = new Scenario();
 
@@ -77,6 +99,8 @@ public class API {
     }
 
     public void loadJsonScenario(String path) {
+        resetSimulation();
+
         Scenario newScenario = new Scenario();
 
         StringBuilder sb = new StringBuilder();
@@ -211,11 +235,15 @@ public class API {
         return currentSimulationEngine.getAirplanes();
     }
 
+    public SimulationEngine getCurrentSimulationEngine() {
+        return currentSimulationEngine;
+    }
+
     public void setCurrentScenario(Scenario currentScenario) {
         this.currentScenario = currentScenario;
     }
 
-    public void setCurrentSimulationEngine(SimulationEngine currentSimulationEngine) {
-        this.currentSimulationEngine = currentSimulationEngine;
+    public void setMainFrame(MainFrame mainFrame) {
+        this.mainFrame = mainFrame;
     }
 }

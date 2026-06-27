@@ -2,9 +2,12 @@ package gui;
 
 import api.API;
 import gui.map.MapCanvas;
+import model.simulation.SimulationEngine;
 
 import java.awt.*;
 import java.awt.event.*;
+
+import static java.lang.Thread.sleep;
 
 public class MainFrame extends Frame {
     private API api;
@@ -12,6 +15,7 @@ public class MainFrame extends Frame {
     private MapCanvas mapCanvas;
     private AirportsPanel airportsPanel;
     private FlightsPanel flightsPanel;
+    private Label timeLabel;
 
     public MainFrame(API api) {
         super("Air Traffic Simulation");
@@ -32,6 +36,8 @@ public class MainFrame extends Frame {
 
         Panel mapPanel = new Panel(new BorderLayout());
 
+        timeLabel = new Label();
+
         mapCanvas = new MapCanvas(api, airportsPanel);
 
         Panel simulationButtonsPanel = new Panel(new FlowLayout());
@@ -50,6 +56,7 @@ public class MainFrame extends Frame {
         simulationButtonsPanel.add(resetButton);
         simulationButtonsPanel.add(startButton);
 
+        mapPanel.add(timeLabel, BorderLayout.NORTH);
         mapPanel.add(mapCanvas, BorderLayout.CENTER);
         mapPanel.add(simulationButtonsPanel, BorderLayout.SOUTH);
 
@@ -70,19 +77,17 @@ public class MainFrame extends Frame {
         });
 
         pauseButton.addActionListener(e -> {
-            // TODO:
-            // api.stopSimulation();
+            api.pauseSimulation();
         });
 
         resumeButton.addActionListener(e -> {
-            // TODO:
-            // api.resumeSimulation();
+            api.resumeSimulation();
         });
 
         resetButton.addActionListener(e -> {
-            // TODO:
-            // api.resetSimulation();
-            // mapCanvas.repaint();
+            api.resetSimulation();
+
+            timeLabel.setText("");
 
             pauseButton.setVisible(false);
             resumeButton.setVisible(false);
@@ -91,13 +96,10 @@ public class MainFrame extends Frame {
 
             simulationButtonsPanel.validate();
             simulationButtonsPanel.repaint();
+            mapCanvas.repaint();
         });
 
         startButton.addActionListener(e -> {
-            // TODO:
-            // api.resetSimulation();
-            // mapCanvas.repaint();
-
             api.startSimulation();
 
             pauseButton.setVisible(true);
@@ -107,9 +109,26 @@ public class MainFrame extends Frame {
 
             simulationButtonsPanel.validate();
             simulationButtonsPanel.repaint();
+            mapCanvas.repaint();
         });
 
         setVisible(true);
+    }
+
+    public void showSimulation() {
+        new Thread(() -> {
+            while (api.getCurrentSimulationEngine() != null && api.getCurrentSimulationEngine().getRunning()) {
+                int time = api.getCurrentSimulationEngine().getCurrentSimulationTime();
+                timeLabel.setText(String.format("%02d:%02d", time / 60 % 24, time % 60));
+                mapCanvas.repaint();
+                try {
+                    sleep(SimulationEngine.realRefreshRate);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            mapCanvas.repaint();
+        }).start();
     }
 
     public void refreshAll() {

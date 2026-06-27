@@ -7,6 +7,6 @@ public class Main {
         Scenario scenario = new Scenario();
         API api = new API();
         api.setCurrentScenario(scenario);
-        new MainFrame(api);
+        api.setMainFrame(new MainFrame(api));
     }
 }
