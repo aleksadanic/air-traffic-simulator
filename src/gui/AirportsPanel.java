@@ -29,6 +29,9 @@ public class AirportsPanel extends Panel {
         Button addAirportButton = new Button("Add airport");
 
         addAirportButton.addActionListener(e -> {
+            if (api.getCurrentSimulationEngine() != null && api.getCurrentSimulationEngine().getRunning()) {
+                return;
+            }
             AddAirportDialog dialog = new AddAirportDialog(owner);
             dialog.showDialog();
             owner.refreshAll();

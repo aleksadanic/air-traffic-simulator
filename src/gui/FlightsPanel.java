@@ -26,6 +26,9 @@ public class FlightsPanel extends Panel {
         Button addFlightButton = new Button("Add flight");
 
         addFlightButton.addActionListener(e -> {
+            if (api.getCurrentSimulationEngine() != null && api.getCurrentSimulationEngine().getRunning()) {
+                return;
+            }
             AddFlightDialog dialog = new AddFlightDialog(owner);
             dialog.showDialog();
             owner.refreshAll();

@@ -35,7 +35,7 @@ public class SimulationEngine implements Runnable {
         }
         eventsCount = 0;
 
-        List<Flight> sortedFlights = scenario.getFlights();
+        List<Flight> sortedFlights = new ArrayList<>(scenario.getFlights());
         sortedFlights.sort(Comparator.comparing(Flight::getDeparture));
         for (Flight flight : sortedFlights) {
             Airplane airplane = new Airplane(flight.getFrom().getPosition(), flight.getTo().getPosition());

@@ -1,7 +1,9 @@
 package gui.map;
 
 import api.API;
+import com.sun.tools.javac.Main;
 import gui.AirportsPanel;
+import gui.MainFrame;
 import model.data.Airport;
 
 import java.awt.*;
@@ -10,12 +12,14 @@ import java.awt.event.MouseEvent;
 
 public class MapCanvas extends Canvas {
     API api;
+    MainFrame mainFrame;
     CoordinatesService coordinatesService = new CoordinatesService(this);
     AirportsView airportsView;
     AirplanesView airplanesView;
 
-    public MapCanvas(API api, AirportsPanel airportsPanel) {
+    public MapCanvas(API api, MainFrame mainFrame, AirportsPanel airportsPanel) {
         this.api = api;
+        this.mainFrame = mainFrame;
 
         airportsView = new AirportsView(this, airportsPanel);
         airplanesView = new AirplanesView(this);

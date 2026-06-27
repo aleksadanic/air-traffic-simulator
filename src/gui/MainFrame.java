@@ -1,6 +1,7 @@
 package gui;
 
 import api.API;
+import background.InactivityTimer;
 import gui.map.MapCanvas;
 import model.simulation.SimulationEngine;
 
@@ -11,6 +12,8 @@ import static java.lang.Thread.sleep;
 
 public class MainFrame extends Frame {
     private API api;
+
+    private InactivityTimer inactivityTimer;
 
     private MapCanvas mapCanvas;
     private AirportsPanel airportsPanel;
@@ -38,7 +41,7 @@ public class MainFrame extends Frame {
 
         timeLabel = new Label();
 
-        mapCanvas = new MapCanvas(api, airportsPanel);
+        mapCanvas = new MapCanvas(api, this, airportsPanel);
 
         Panel simulationButtonsPanel = new Panel(new FlowLayout());
 
@@ -72,6 +75,7 @@ public class MainFrame extends Frame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                inactivityTimer.setBlocked(true);
                 dispose();
             }
         });
@@ -112,11 +116,13 @@ public class MainFrame extends Frame {
             mapCanvas.repaint();
         });
 
+        inactivityTimer = new InactivityTimer(this);
+
         setVisible(true);
     }
 
     public void showSimulation() {
-        new Thread(() -> {
+        Thread t = new Thread(() -> {
             while (api.getCurrentSimulationEngine() != null && api.getCurrentSimulationEngine().getRunning()) {
                 int time = api.getCurrentSimulationEngine().getCurrentSimulationTime();
                 timeLabel.setText(String.format("%02d:%02d", time / 60 % 24, time % 60));
@@ -127,8 +133,11 @@ public class MainFrame extends Frame {
                     e.printStackTrace();
                 }
             }
+            inactivityTimer.setPaused(false);
             mapCanvas.repaint();
-        }).start();
+        });
+        t.setDaemon(true);
+        t.start();
     }
 
     public void refreshAll() {
@@ -143,5 +152,9 @@ public class MainFrame extends Frame {
 
     public MapCanvas getMapCanvas() {
         return mapCanvas;
+    }
+
+    public InactivityTimer getInactivityTimer() {
+        return inactivityTimer;
     }
 }

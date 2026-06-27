@@ -18,25 +18,31 @@ public class API {
     private MainFrame mainFrame;
 
     public void pauseSimulation() {
+        mainFrame.getInactivityTimer().setPaused(false);
         if (currentSimulationEngine != null) {
             currentSimulationEngine.pauseSimulation();
         }
     }
 
     public void resumeSimulation() {
+        mainFrame.getInactivityTimer().setPaused(true);
         if (currentSimulationEngine != null) {
             currentSimulationEngine.resumeSimulation();
         }
     }
 
     public void resetSimulation() {
+        mainFrame.getInactivityTimer().setPaused(false);
         currentSimulationEngine = null;
     }
 
     public void startSimulation() {
+        mainFrame.getInactivityTimer().setPaused(true);
         currentSimulationEngine = new SimulationEngine(currentScenario);
         currentSimulationEngine.setRunning(true);
-        new Thread(currentSimulationEngine).start();
+        Thread t = new Thread(currentSimulationEngine);
+        t.setDaemon(true);
+        t.start();
         mainFrame.showSimulation();
     }
 

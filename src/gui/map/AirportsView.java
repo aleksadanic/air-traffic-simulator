@@ -54,10 +54,12 @@ public class AirportsView {
                 blinkingTimer.cancel();
                 blinkingTimer = null;
                 redPhase = false;
+                mapCanvas.mainFrame.getInactivityTimer().setPaused(false);
                 mapCanvas.repaint();
             }
         } else {
             if (blinking.isEmpty()) {
+                mapCanvas.mainFrame.getInactivityTimer().setPaused(true);
                 blinkingTimer = new Timer(true);
                 blinkingTimer.scheduleAtFixedRate(new TimerTask() {
                     @Override
