@@ -1,7 +1,6 @@
 package gui;
 
 import exceptions.ScenarioException;
-import model.Flight;
 
 import java.awt.*;
 import java.awt.event.*;

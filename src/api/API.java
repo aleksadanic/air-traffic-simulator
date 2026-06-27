@@ -1,9 +1,9 @@
 package api;
 
 import exceptions.ScenarioException;
-import model.Airport;
-import model.Flight;
-import model.Scenario;
+import model.data.Airport;
+import model.data.Flight;
+import model.data.Scenario;
 
 import java.io.*;
 import java.util.List;

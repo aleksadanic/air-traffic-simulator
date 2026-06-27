@@ -1,7 +1,7 @@
 package gui.map;
 
 import gui.AirportsPanel;
-import model.Airport;
+import model.data.Airport;
 
 import java.awt.*;
 import java.util.HashSet;
@@ -27,8 +27,8 @@ public class AirportsView {
                 continue;
             }
 
-            int X = mapCanvas.coordinatesService.mapX(airport.getX());
-            int Y = mapCanvas.coordinatesService.mapY(airport.getY());
+            int X = (int) mapCanvas.coordinatesService.mapX(airport.getPosition().getX());
+            int Y = (int) mapCanvas.coordinatesService.mapY(airport.getPosition().getY());
 
             if (redPhase && blinking.contains(airport)) {
                 g.setColor(Color.RED);

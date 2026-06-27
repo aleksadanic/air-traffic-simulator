@@ -1,6 +1,6 @@
 package gui.map;
 
-import model.Airport;
+import model.data.Airport;
 
 import java.awt.*;
 
@@ -31,16 +31,16 @@ public class CoordinatesService {
     }
 
     public Rectangle getAirportBounds(Airport airport) {
-        int X = mapX(airport.getX());
-        int Y = mapY(airport.getY());
+        int X = (int) mapX(airport.getPosition().getX());
+        int Y = (int) mapY(airport.getPosition().getY());
         return new Rectangle(X - AIRPORT_SIZE / 2, Y - AIRPORT_SIZE / 2, AIRPORT_SIZE, AIRPORT_SIZE);
     }
 
-    public int mapX(int x) {
+    public double mapX(double x) {
         return getMapBounds().x + (x + REAL_MAX_X) * getMapBounds().width / (2 * REAL_MAX_X);
     }
 
-    public int mapY(int y) {
+    public double mapY(double y) {
         return getMapBounds().y + (REAL_MAX_Y - y) * getMapBounds().height / (2 * REAL_MAX_Y);
     }
 

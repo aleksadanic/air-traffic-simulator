@@ -2,7 +2,7 @@ package gui.map;
 
 import api.API;
 import gui.AirportsPanel;
-import model.Airport;
+import model.data.Airport;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;

@@ -1,12 +1,9 @@
 package gui;
 
 import api.API;
-import model.Airport;
-import model.Flight;
+import model.data.Flight;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class FlightsPanel extends Panel {
     private MainFrame owner;

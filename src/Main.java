@@ -1,6 +1,6 @@
 import api.API;
 import gui.MainFrame;
-import model.Scenario;
+import model.data.Scenario;
 
 public class Main {
     public static void main(String[] args) {

@@ -1,13 +1,9 @@
 package gui;
 
 import api.API;
-import model.Airport;
+import model.data.Airport;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -64,8 +60,8 @@ public class AirportsPanel extends Panel {
                 "%-5s %-30s %5d %5d",
                 airport.getCode(),
                 airport.getName(),
-                airport.getX(),
-                airport.getY()
+                (int) airport.getPosition().getX(),
+                (int) airport.getPosition().getY()
             )
         );
 
