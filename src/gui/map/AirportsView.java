@@ -27,8 +27,8 @@ public class AirportsView {
                 continue;
             }
 
-            int X = (int) mapCanvas.coordinatesService.mapX(airport.getPosition().getX());
-            int Y = (int) mapCanvas.coordinatesService.mapY(airport.getPosition().getY());
+            int X = mapCanvas.coordinatesService.mapX(airport.getPosition().getX());
+            int Y = mapCanvas.coordinatesService.mapY(airport.getPosition().getY());
 
             if (redPhase && blinking.contains(airport)) {
                 g.setColor(Color.RED);

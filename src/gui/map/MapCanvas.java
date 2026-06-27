@@ -12,11 +12,13 @@ public class MapCanvas extends Canvas {
     API api;
     CoordinatesService coordinatesService = new CoordinatesService(this);
     AirportsView airportsView;
+    AirplanesView airplanesView;
 
     public MapCanvas(API api, AirportsPanel airportsPanel) {
         this.api = api;
 
         airportsView = new AirportsView(this, airportsPanel);
+        airplanesView = new AirplanesView(this);
 
         setBackground(Color.WHITE);
         addMouseListener(new MouseAdapter() {
@@ -31,6 +33,7 @@ public class MapCanvas extends Canvas {
     public void paint(Graphics g) {
         coordinatesService.drawMapBackground(g);
         airportsView.drawAirports(g);
+        airplanesView.drawAirplanes(g);
     }
 
     private void handleMouseClick(int mouseX, int mouseY) {

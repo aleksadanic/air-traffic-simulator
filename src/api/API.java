@@ -4,12 +4,21 @@ import exceptions.ScenarioException;
 import model.data.Airport;
 import model.data.Flight;
 import model.data.Scenario;
+import model.simulation.Airplane;
+import model.simulation.SimulationEngine;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class API {
     private Scenario currentScenario;
+    private SimulationEngine currentSimulationEngine = null;
+
+    public void startSimulation() {
+        currentSimulationEngine = new SimulationEngine(currentScenario);
+        new Thread(currentSimulationEngine).start();
+    }
 
     public void addAirport(String code, String name, String X, String Y) {
         currentScenario.addAirport(currentScenario.createAirport(code, name, X, Y));
@@ -195,7 +204,18 @@ public class API {
         return currentScenario.getFlights();
     }
 
+    public List<Airplane> getAirplanes() {
+        if (currentSimulationEngine == null) {
+            return new ArrayList<>();
+        }
+        return currentSimulationEngine.getAirplanes();
+    }
+
     public void setCurrentScenario(Scenario currentScenario) {
         this.currentScenario = currentScenario;
+    }
+
+    public void setCurrentSimulationEngine(SimulationEngine currentSimulationEngine) {
+        this.currentSimulationEngine = currentSimulationEngine;
     }
 }

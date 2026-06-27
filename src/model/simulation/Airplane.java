@@ -10,8 +10,8 @@ public class Airplane {
     boolean flying = false;
 
     public Airplane(Position initialPosition, Position targetPosition) {
-        this.currentPosition = initialPosition;
-        this.targetPosition = targetPosition;
+        this.currentPosition = new Position(initialPosition.getX(), initialPosition.getY());
+        this.targetPosition = new Position(targetPosition.getX(), targetPosition.getY());
     }
 
     // Moves forward through simulation time for time minutes
@@ -19,6 +19,14 @@ public class Airplane {
         if (flying) {
             currentPosition.move(velocity, time);
         }
+    }
+
+    public Position getCurrentPosition() {
+        return currentPosition;
+    }
+
+    public boolean getFlying() {
+        return flying;
     }
 
     public void setVelocity(Velocity velocity) {

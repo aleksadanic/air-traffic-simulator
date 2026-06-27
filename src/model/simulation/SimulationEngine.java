@@ -16,6 +16,7 @@ public class SimulationEngine implements Runnable {
     private final int waitingTime = 10; // Amount of minutes required between two departures from the same airport
     private final int realRefreshRate = 200; // Simulation refresh period in ms
     private final int Q = 100; // Real 1000ms <=> simulation 10min, Q is the ratio of these
+    private final Object lock = new Object(); // We need mutex on airplane positions
 
     List<Airplane> airplanes = new ArrayList<>();
     Map<Airport, Integer> latestDeparture = new HashMap<>();
@@ -71,12 +72,20 @@ public class SimulationEngine implements Runnable {
             for (Airplane airplane : arrivals[currentSimulationTime]) {
                 airplane.setFlying(false);
             }
-            for (Airplane airplane : airplanes) {
-                airplane.forward(1);
+            synchronized (lock) {
+                for (Airplane airplane : airplanes) {
+                    airplane.forward(1);
+                }
             }
 
             currentSimulationTime++;
             currentRealTime += Q;
+        }
+    }
+
+    public List<Airplane> getAirplanes() {
+        synchronized (lock) {
+            return new ArrayList<>(airplanes);
         }
     }
 }

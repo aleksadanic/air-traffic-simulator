@@ -11,6 +11,7 @@ public class CoordinatesService {
     public static final int Q = 2;
     public static final int MARGIN = 30;
     public static final int AIRPORT_SIZE = 8;
+    public static final int AIRPLANE_SIZE = 6;
     public static Rectangle mapBounds = null;
 
     public CoordinatesService(MapCanvas mapCanvas) {
@@ -31,17 +32,17 @@ public class CoordinatesService {
     }
 
     public Rectangle getAirportBounds(Airport airport) {
-        int X = (int) mapX(airport.getPosition().getX());
-        int Y = (int) mapY(airport.getPosition().getY());
+        int X = mapX(airport.getPosition().getX());
+        int Y = mapY(airport.getPosition().getY());
         return new Rectangle(X - AIRPORT_SIZE / 2, Y - AIRPORT_SIZE / 2, AIRPORT_SIZE, AIRPORT_SIZE);
     }
 
-    public double mapX(double x) {
-        return getMapBounds().x + (x + REAL_MAX_X) * getMapBounds().width / (2 * REAL_MAX_X);
+    public int mapX(double x) {
+        return (int) Math.round(getMapBounds().x + (x + REAL_MAX_X) * getMapBounds().width / (2 * REAL_MAX_X));
     }
 
-    public double mapY(double y) {
-        return getMapBounds().y + (REAL_MAX_Y - y) * getMapBounds().height / (2 * REAL_MAX_Y);
+    public int mapY(double y) {
+        return (int) Math.round(getMapBounds().y + (REAL_MAX_Y - y) * getMapBounds().height / (2 * REAL_MAX_Y));
     }
 
     public Rectangle getMapBounds() {

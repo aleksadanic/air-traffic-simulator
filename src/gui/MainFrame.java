@@ -30,9 +30,30 @@ public class MainFrame extends Frame {
         rightPanel.add(airportsPanel);
         rightPanel.add(flightsPanel);
 
+        Panel mapPanel = new Panel(new BorderLayout());
+
         mapCanvas = new MapCanvas(api, airportsPanel);
 
-        add(mapCanvas, BorderLayout.CENTER);
+        Panel simulationButtonsPanel = new Panel(new FlowLayout());
+
+        Button pauseButton = new Button("Pause");
+        Button resumeButton = new Button("Resume");
+        Button resetButton = new Button("Reset");
+        Button startButton = new Button("Start");
+
+        pauseButton.setVisible(false);
+        resumeButton.setVisible(false);
+        resetButton.setVisible(false);
+
+        simulationButtonsPanel.add(pauseButton);
+        simulationButtonsPanel.add(resumeButton);
+        simulationButtonsPanel.add(resetButton);
+        simulationButtonsPanel.add(startButton);
+
+        mapPanel.add(mapCanvas, BorderLayout.CENTER);
+        mapPanel.add(simulationButtonsPanel, BorderLayout.SOUTH);
+
+        add(mapPanel, BorderLayout.CENTER);
         add(rightPanel, BorderLayout.EAST);
 
         setMenuBar(new AppMenuBar(this, api));
@@ -46,6 +67,46 @@ public class MainFrame extends Frame {
             public void windowClosing(WindowEvent e) {
                 dispose();
             }
+        });
+
+        pauseButton.addActionListener(e -> {
+            // TODO:
+            // api.stopSimulation();
+        });
+
+        resumeButton.addActionListener(e -> {
+            // TODO:
+            // api.resumeSimulation();
+        });
+
+        resetButton.addActionListener(e -> {
+            // TODO:
+            // api.resetSimulation();
+            // mapCanvas.repaint();
+
+            pauseButton.setVisible(false);
+            resumeButton.setVisible(false);
+            resetButton.setVisible(false);
+            startButton.setVisible(true);
+
+            simulationButtonsPanel.validate();
+            simulationButtonsPanel.repaint();
+        });
+
+        startButton.addActionListener(e -> {
+            // TODO:
+            // api.resetSimulation();
+            // mapCanvas.repaint();
+
+            api.startSimulation();
+
+            pauseButton.setVisible(true);
+            resumeButton.setVisible(true);
+            resetButton.setVisible(true);
+            startButton.setVisible(false);
+
+            simulationButtonsPanel.validate();
+            simulationButtonsPanel.repaint();
         });
 
         setVisible(true);
